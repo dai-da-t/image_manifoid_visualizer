@@ -18,7 +18,7 @@ from sklearn.manifold import (
 from tqdm import tqdm
 
 
-def initialize_canvas(figsize, coords: Optional[np.ndarray] = None, font_size: int = 14):
+def initialize_canvas(figsize, coords: Optional[np.ndarray] = None, font_size: int = 14) -> Tuple[plt.Figure, plt.Axes]:
     fig, ax = plt.subplots(figsize=figsize)
     fig.tight_layout()
 
@@ -47,7 +47,7 @@ def visualize_image_distribution(
 
     for image, coord in zip(images, coords):
         # BGR->RGB cvtColorはint8を想定されているため正規化したデータでは使えない
-        image = image[:, :, [2, 1, 0]]
+        image: np.ndarray = image[:, :, [2, 1, 0]]
 
         image_offset = OffsetImage(image, zoom=zoom)
         annotationbbox = AnnotationBbox(image_offset, (coord[0], coord[1]), xycoords="data", frameon=False)
@@ -58,12 +58,12 @@ def visualize_image_distribution(
 
 def visualize_reduction(
     labels: np.ndarray, coords: np.ndarray, figsize: Tuple[float, float]
-):
+) -> Tuple[plt.Figure, plt.Axes]:
     fig, ax = initialize_canvas(figsize, coords)
 
     cmap = plt.get_cmap("jet")
     for i, name in enumerate(np.unique(labels)):
-        indices = np.where(labels == name)[0]
+        indices: np.ndarray = np.where(labels == name)[0]
         color = cmap(i/np.unique(labels).shape[0])
         ax.scatter(coords[indices, 0], coords[indices, 1], s=50, color=color, label=name)
 
