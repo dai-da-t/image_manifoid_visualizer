@@ -57,6 +57,21 @@ def visualize_image_distribution(
     return fig, ax
 
 
+def visualize_reduction(
+    labels: np.ndarray, coords: np.ndarray, figsize: Tuple[float, float]
+):
+    fig, ax = initialize_canvas(figsize, coords)
+
+    cmap = plt.get_cmap("jet")
+    for i, name in enumerate(np.unique(labels)):
+        indices = np.where(labels == name)[0]
+        ax.scatter(coords[indices, 0], coords[indices, 1], s=50, color=cmap(i/np.unique(labels).shape[0]), label=name)
+
+    ax.legend()
+
+    return fig, ax
+
+
 def load_images_with_label(
     image_dir: str, image_size: Tuple[int, int] = (290, 350)
 ) -> Tuple[np.ndarray, np.ndarray]:
