@@ -5,6 +5,7 @@ from typing import Optional, Tuple
 
 import cv2
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 import numpy as np
 from matplotlib.offsetbox import AnnotationBbox, OffsetImage
 from sklearn.decomposition import PCA
@@ -68,8 +69,8 @@ def visualize_reduction(
     cmap = plt.get_cmap("jet")
     for i, name in enumerate(np.unique(labels)):
         indices: np.ndarray = np.where(labels == name)[0]
-        color = cmap(i/np.unique(labels).shape[0])
-        ax.scatter(coords[indices, 0], coords[indices, 1], s=50, color=color, label=name)
+        color = list(mcolors.TABLEAU_COLORS)[i]
+        ax.scatter(
             coords[indices, 0], coords[indices, 1], s=50, color=color, label=name
         )
 
