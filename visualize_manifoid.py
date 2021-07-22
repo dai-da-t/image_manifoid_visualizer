@@ -50,9 +50,9 @@ def visualize_image_distribution(
         # BGR->RGB cvtColorはint8を想定されているため正規化したデータでは使えない
         image = image[:, :, [2, 1, 0]]
 
-        im = OffsetImage(image, zoom=zoom)
-        ab = AnnotationBbox(im, (coord[0], coord[1]), xycoords="data", frameon=False)
-        artists.append(ax.add_artist(ab))
+        image_offset = OffsetImage(image, zoom=zoom)
+        annotationbbox = AnnotationBbox(image_offset, (coord[0], coord[1]), xycoords="data", frameon=False)
+        artists.append(ax.add_artist(annotationbbox))
 
     return fig, ax
 
