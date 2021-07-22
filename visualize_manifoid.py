@@ -37,8 +37,8 @@ def initialize_canvas(figsize, coords: Optional[np.ndarray] = None, font_size: i
 def visualize_image_distribution(
     images: np.ndarray,
     coords: np.ndarray,
-    zoom: float = 0.22,
-    figsize: Tuple[float, float] = (25, 15),
+    figsize: Tuple[float, float],
+    zoom: float,
 ) -> Tuple[plt.Figure, plt.Axes]:
     """
     coords[i]にimages[i]をscatter
