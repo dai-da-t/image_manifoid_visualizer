@@ -18,6 +18,22 @@ from sklearn.manifold import (
 from tqdm import tqdm
 
 
+def initialize_canvas(figsize, coords: Optional[np.ndarray] = None, font_size: int = 14):
+    fig, ax = plt.subplots(figsize=figsize)
+    fig.tight_layout()
+
+    if coords is not None:
+        xmin, xmax = coords[:, 0].min(), coords[:, 0].max()
+        ymin, ymax = coords[:, 1].min(), coords[:, 1].max()
+        ax.set_xlim(xmin * 0.9, xmax * 1.1)
+        ax.set_ylim(ymin * 0.9, ymax * 1.1)
+
+    ax.tick_params(axis="x", labelsize=font_size)
+    ax.tick_params(axis="y", labelsize=font_size)
+
+    return fig, ax
+
+
 def visualize_image_distribution(
     images: np.ndarray,
     coords: np.ndarray,
@@ -27,15 +43,7 @@ def visualize_image_distribution(
     """
     coords[i]にimages[i]をscatter
     """
-    fig, ax = plt.subplots(figsize=figsize)
-
-    xmin, xmax = coords[:, 0].min(), coords[:, 0].max()
-    ymin, ymax = coords[:, 1].min(), coords[:, 1].max()
-    ax.set_xlim(xmin * 0.9, xmax * 1.1)
-    ax.set_ylim(ymin * 0.9, ymax * 1.1)
-
-    ax.tick_params(axis="x", labelsize=20)
-    ax.tick_params(axis="y", labelsize=20)
+    fig, ax = initialize_canvas(figsize, coords, font_size=20)
 
     artists = []
     for image, coord in zip(images, coords):
