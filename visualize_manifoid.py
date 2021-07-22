@@ -45,14 +45,13 @@ def visualize_image_distribution(
     """
     fig, ax = initialize_canvas(figsize, coords, font_size=20)
 
-    artists = []
     for image, coord in zip(images, coords):
         # BGR->RGB cvtColorはint8を想定されているため正規化したデータでは使えない
         image = image[:, :, [2, 1, 0]]
 
         image_offset = OffsetImage(image, zoom=zoom)
         annotationbbox = AnnotationBbox(image_offset, (coord[0], coord[1]), xycoords="data", frameon=False)
-        artists.append(ax.add_artist(annotationbbox))
+        ax.add_artist(annotationbbox)
 
     return fig, ax
 
