@@ -49,9 +49,11 @@ def visualize_image_distribution(
     return fig, ax
 
 
-def load_images(image_dir: str, image_size: Tuple[int, int] = (290, 350)) -> np.ndarray:
+def load_images_with_label(
+    image_dir: str, image_size: Tuple[int, int] = (290, 350)
+) -> Tuple[np.ndarray, np.ndarray]:
     image_list = []
-
+    labels = []
     image_path = os.path.join(image_dir, "*.jpg")
 
     for img_fname in glob.glob(image_path):
@@ -59,7 +61,10 @@ def load_images(image_dir: str, image_size: Tuple[int, int] = (290, 350)) -> np.
         image = cv2.resize(image, dsize=image_size)
         image_list.append(image / 255)
 
-    return np.array(image_list)
+        label = img_fname.split('/')[-2]
+        labels.append(label)
+
+    return np.array(image_list), np.array(labels)
 
 
 def save_reduction_result(
@@ -83,7 +88,7 @@ def save_reduction_result(
 
 
 def main(args: argparse.Namespace):
-    images = load_images(args.input_dir)
+    images, labels = load_images_with_label(args.input_dir)
     print("Num images: {}".format(images.shape[0]))
 
     models = {
