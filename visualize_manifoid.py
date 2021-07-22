@@ -18,7 +18,9 @@ from sklearn.manifold import (
 from tqdm import tqdm
 
 
-def initialize_canvas(figsize, coords: Optional[np.ndarray] = None, font_size: int = 14) -> Tuple[plt.Figure, plt.Axes]:
+def initialize_canvas(
+    figsize, coords: Optional[np.ndarray] = None, font_size: int = 14
+) -> Tuple[plt.Figure, plt.Axes]:
     fig, ax = plt.subplots(figsize=figsize)
     fig.tight_layout()
 
@@ -50,7 +52,9 @@ def visualize_image_distribution(
         image: np.ndarray = image[:, :, [2, 1, 0]]
 
         image_offset = OffsetImage(image, zoom=zoom)
-        annotationbbox = AnnotationBbox(image_offset, (coord[0], coord[1]), xycoords="data", frameon=False)
+        annotationbbox = AnnotationBbox(
+            image_offset, (coord[0], coord[1]), xycoords="data", frameon=False
+        )
         ax.add_artist(annotationbbox)
 
     return fig, ax
@@ -66,6 +70,8 @@ def visualize_reduction(
         indices: np.ndarray = np.where(labels == name)[0]
         color = cmap(i/np.unique(labels).shape[0])
         ax.scatter(coords[indices, 0], coords[indices, 1], s=50, color=color, label=name)
+            coords[indices, 0], coords[indices, 1], s=50, color=color, label=name
+        )
 
     ax.legend()
 
@@ -84,7 +90,7 @@ def load_images_with_label(
         image = cv2.resize(image, dsize=image_size)
         image_list.append(image / 255)
 
-        label = img_fname.split('/')[-2]
+        label = img_fname.split("/")[-2]
         labels.append(label)
 
     return np.array(image_list), np.array(labels)
@@ -121,8 +127,12 @@ def main(args: argparse.Namespace):
         fig, ax = visualize_reduction(labels, coords, figsize=(9, 6))
         save_figure(fig, ax, os.path.join(args.output_dir, model_name))
 
-        fig, ax = visualize_image_distribution(images, coords, zoom=0.25, figsize=(40, 25))
-        save_figure(fig, ax, os.path.join(args.output_dir, '{}_image'.format(model_name)))
+        fig, ax = visualize_image_distribution(
+            images, coords, zoom=0.25, figsize=(40, 25)
+        )
+        save_figure(
+            fig, ax, os.path.join(args.output_dir, "{}_image".format(model_name))
+        )
 
 
 if __name__ == "__main__":
@@ -142,10 +152,10 @@ if __name__ == "__main__":
 
     plt.rcParams["legend.fancybox"] = False
     plt.rcParams["legend.framealpha"] = 1
-    plt.rcParams["legend.edgecolor"] = 'black'
+    plt.rcParams["legend.edgecolor"] = "black"
     plt.rcParams["legend.handlelength"] = 1
 
-    plt.rcParams['xtick.direction'] = 'in'
-    plt.rcParams['ytick.direction'] = 'in'
+    plt.rcParams["xtick.direction"] = "in"
+    plt.rcParams["ytick.direction"] = "in"
 
     main(args)
