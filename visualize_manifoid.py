@@ -64,7 +64,8 @@ def visualize_reduction(
     cmap = plt.get_cmap("jet")
     for i, name in enumerate(np.unique(labels)):
         indices = np.where(labels == name)[0]
-        ax.scatter(coords[indices, 0], coords[indices, 1], s=50, color=cmap(i/np.unique(labels).shape[0]), label=name)
+        color = cmap(i/np.unique(labels).shape[0])
+        ax.scatter(coords[indices, 0], coords[indices, 1], s=50, color=color, label=name)
 
     ax.legend()
 
