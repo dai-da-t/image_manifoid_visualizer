@@ -146,4 +146,12 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    plt.rcParams["legend.fancybox"] = False
+    plt.rcParams["legend.framealpha"] = 1
+    plt.rcParams["legend.edgecolor"] = 'black'
+    plt.rcParams["legend.handlelength"] = 1
+
+    plt.rcParams['xtick.direction'] = 'in'
+    plt.rcParams['ytick.direction'] = 'in'
+
     main(args)
