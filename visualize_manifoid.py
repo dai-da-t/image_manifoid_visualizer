@@ -1,7 +1,7 @@
 import argparse
 import glob
 import os
-from typing import Tuple
+from typing import Optional, Tuple
 
 import cv2
 import matplotlib.pyplot as plt
@@ -90,28 +90,15 @@ def load_images_with_label(
     return np.array(image_list), np.array(labels)
 
 
-def save_reduction_result(
-    model,
-    data: np.ndarray,
-    fig_name: str,
-    zoom: float = 0.25,
-    figsize: Tuple[float, float] = (40, 25),
-):
-    """
-    次元削減を行って結果を画像に保存
-    """
-    data_flatten = data.reshape(data.shape[0], -1)
-    coords = model.fit_transform(data_flatten)
-
-    fig, ax = visualize_image_distribution(data, coords, zoom=zoom, figsize=figsize)
-    fig.tight_layout()
-    fig.savefig(fig_name, bbox_inches="tight")
+def save_figure(fig: plt.Figure, ax: plt.Axes, save_path: str) -> None:
+    fig.savefig(save_path, bbox_inches="tight")
     plt.clf()
     plt.close()
 
 
 def main(args: argparse.Namespace):
     images, labels = load_images_with_label(args.input_dir)
+    images_flatten = images.reshape(images.shape[0], -1)
     print("Num images: {}".format(images.shape[0]))
 
     models = {
@@ -128,7 +115,14 @@ def main(args: argparse.Namespace):
 
     for model_name, model in tqdm(models.items()):
         tqdm.write("Processing {}".format(model_name))
-        save_reduction_result(model, images, os.path.join(args.output_dir, model_name))
+
+        coords = model.fit_transform(images_flatten)
+
+        fig, ax = visualize_reduction(labels, coords, figsize=(9, 6))
+        save_figure(fig, ax, os.path.join(args.output_dir, model_name))
+
+        fig, ax = visualize_image_distribution(images, coords, zoom=0.25, figsize=(40, 25))
+        save_figure(fig, ax, os.path.join(args.output_dir, '{}_image'.format(model_name)))
 
 
 if __name__ == "__main__":
